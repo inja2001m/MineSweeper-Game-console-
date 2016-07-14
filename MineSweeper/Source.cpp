@@ -6,7 +6,7 @@ using namespace std;
 
 #define WIDTH 15
 #define HEIGHT 10
-#define MINECNT 20
+#define MINECNT 20 // 지뢰의 개수
 
 enum Tile
 {
