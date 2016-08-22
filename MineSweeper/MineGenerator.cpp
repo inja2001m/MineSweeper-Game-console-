@@ -1,32 +1,19 @@
-#include <iostream>
-#include <Windows.h>
-#include <random>
+#include "MineGenerator.h"
 
-using namespace std;
-
-#define WIDTH 15
-#define HEIGHT 10
-#define MINECNT 20 // 지뢰의 개수
-
-enum Tile
+MineMap::MineMap()
 {
-	MINE = 9
-};
+	createMap();
+}
 
-int map[HEIGHT][WIDTH];
-
-inline void zeroSetMap() { for (int i = 0; i < HEIGHT; ++i) for (int j = 0; j < WIDTH; ++j) map[i][j] = NULL; }
-inline void drawMap();
-void createMap(), createMines(), createCntMines();
-
-void createMap()
+void MineMap::createMap()
 {
 	zeroSetMap();
-	
+
 	createMines();
 	createCntMines();
 }
-void createMines()
+
+void MineMap::createMines()
 {
 	random_device rd;
 	mt19937 gen(rd());
@@ -44,11 +31,12 @@ void createMines()
 		} while (map[height][width] == MINE);
 
 		map[height][width] = MINE;
-		
+
 		--nMine;
 	}
 }
-void createCntMines()
+
+void MineMap::createCntMines()
 {
 	for (int i = 0; i < HEIGHT; ++i)
 	{
@@ -57,34 +45,34 @@ void createCntMines()
 			if (map[i][j] == 0)
 			{
 				// 맨 위 처리x
-				if (i != 0) 
-					if (map[i - 1][j]     == MINE) ++map[i][j];
-		
+				if (i != 0)
+					if (map[i - 1][j] == MINE) ++map[i][j];
+
 				// 맨 왼쪽 처리x
-				if (j != 0) 
+				if (j != 0)
 				{
 					if (map[i - 1][j - 1] == MINE) ++map[i][j];
-					if (map[i]    [j - 1] == MINE) ++map[i][j];
+					if (map[i][j - 1] == MINE) ++map[i][j];
 					if (map[i + 1][j - 1] == MINE) ++map[i][j];
 				}
 
 				// 맨 오른쪽 처리x
-				if (j != WIDTH - 1) 
+				if (j != WIDTH - 1)
 				{
 					if (map[i - 1][j + 1] == MINE) ++map[i][j];
-					if (map[i]    [j + 1] == MINE) ++map[i][j];
+					if (map[i][j + 1] == MINE) ++map[i][j];
 					if (map[i + 1][j + 1] == MINE) ++map[i][j];
 				}
 
 				// 맨 아래 처리x
-				if (i != HEIGHT - 1) 
-					if (map[i + 1][j]     == MINE) ++map[i][j];
+				if (i != HEIGHT - 1)
+					if (map[i + 1][j] == MINE) ++map[i][j];
 			}
 		}
 	}
 }
 
-inline void drawMap()
+inline void MineMap::drawMap()
 {
 	int cntMine = 0;
 
@@ -99,18 +87,4 @@ inline void drawMap()
 		cout << endl;
 	}
 	cout << "cntMine: " << cntMine << endl;
-}
-
-int main()
-{
-	while (1)
-	{
-		createMap();
-
-		drawMap();
-
-		system("pause");
-		system("cls");
-	}
-	return 0;
 }
