@@ -44,11 +44,11 @@ void MineMap::createCntMines()
 		{
 			if (map[i][j] == 0)
 			{
-				// 盖 困 贸府x
+				// At the top process X
 				if (i != 0)
 					if (map[i - 1][j] == MINE) ++map[i][j];
 
-				// 盖 哭率 贸府x
+				//  At the left process X
 				if (j != 0)
 				{
 					if (map[i - 1][j - 1] == MINE) ++map[i][j];
@@ -56,7 +56,7 @@ void MineMap::createCntMines()
 					if (map[i + 1][j - 1] == MINE) ++map[i][j];
 				}
 
-				// 盖 坷弗率 贸府x
+				//  At the right process X
 				if (j != WIDTH - 1)
 				{
 					if (map[i - 1][j + 1] == MINE) ++map[i][j];
@@ -64,7 +64,7 @@ void MineMap::createCntMines()
 					if (map[i + 1][j + 1] == MINE) ++map[i][j];
 				}
 
-				// 盖 酒贰 贸府x
+				//  At the bottom process X
 				if (i != HEIGHT - 1)
 					if (map[i + 1][j] == MINE) ++map[i][j];
 			}
