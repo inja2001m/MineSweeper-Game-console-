@@ -28,9 +28,9 @@ void MineMap::createMines()
 		{
 			width = widthDist(gen);
 			height = heightDist(gen);
-		} while (map[height][width] == MINE);
+		} while (map[height][width].value == MINE);
 
-		map[height][width] = MINE;
+		map[height][width].value = MINE;
 
 		--nMine;
 	}
@@ -42,31 +42,31 @@ void MineMap::createCntMines()
 	{
 		for (int j = 0; j < WIDTH; ++j)
 		{
-			if (map[i][j] == 0)
+			if (map[i][j].value == 0)
 			{
 				// At the top process X
 				if (i != 0)
-					if (map[i - 1][j] == MINE) ++map[i][j];
+					if (map[i - 1][j].value == MINE) ++map[i][j].value;
 
 				//  At the left process X
 				if (j != 0)
 				{
-					if (map[i - 1][j - 1] == MINE) ++map[i][j];
-					if (map[i][j - 1] == MINE) ++map[i][j];
-					if (map[i + 1][j - 1] == MINE) ++map[i][j];
+					if (map[i - 1][j - 1].value == MINE) ++map[i][j].value;
+					if (map[i][j - 1].value == MINE) ++map[i][j].value;
+					if (map[i + 1][j - 1].value == MINE) ++map[i][j].value;
 				}
 
 				//  At the right process X
 				if (j != WIDTH - 1)
 				{
-					if (map[i - 1][j + 1] == MINE) ++map[i][j];
-					if (map[i][j + 1] == MINE) ++map[i][j];
-					if (map[i + 1][j + 1] == MINE) ++map[i][j];
+					if (map[i - 1][j + 1].value == MINE) ++map[i][j].value;
+					if (map[i][j + 1].value == MINE) ++map[i][j].value;
+					if (map[i + 1][j + 1].value == MINE) ++map[i][j].value;
 				}
 
 				//  At the bottom process X
 				if (i != HEIGHT - 1)
-					if (map[i + 1][j] == MINE) ++map[i][j];
+					if (map[i + 1][j].value == MINE) ++map[i][j].value;
 			}
 		}
 	}
@@ -80,9 +80,9 @@ inline void MineMap::drawMap()
 	{
 		for (int j = 0; j < WIDTH; ++j)
 		{
-			cout << map[i][j] << " ";
+			cout << map[i][j].value << " ";
 
-			if (map[i][j] == 9) ++cntMine;
+			if (map[i][j].value == 9) ++cntMine;
 		}
 		cout << endl;
 	}

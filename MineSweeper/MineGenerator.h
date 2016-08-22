@@ -14,16 +14,22 @@ enum Tile
 	MINE = 9
 };
 
+class Mine
+{
+public:
+	int value;
+	bool state = false;
+};
 class MineMap
 {
 private:
-	inline void zeroSetMap() { for (int i = 0; i < HEIGHT; ++i) for (int j = 0; j < WIDTH; ++j) map[i][j] = NULL; }
+	inline void zeroSetMap() { for (int i = 0; i < HEIGHT; ++i) for (int j = 0; j < WIDTH; ++j) map[i][j].value = NULL; }
 	inline void drawMap();
 	void createMap(), createMines(), createCntMines();
 
 public:
 	MineMap();
-
-	int map[HEIGHT][WIDTH];
+	
+	Mine map[HEIGHT][WIDTH];
 };
 
