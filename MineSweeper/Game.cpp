@@ -4,41 +4,7 @@
 
 MineMap realMap;
 char blindMap[HEIGHT][WIDTH];
-
-void init()
-{
-	for (int i = 0; i < HEIGHT; ++i)
-	{
-		for (int j = 0; j < WIDTH; ++j)
-		{
-			blindMap[i][j] = '#';
-			cout << blindMap[i][j] << " ";
-		}
-		cout << endl;
-	}
-}
-
-void update()
-{
-	static int keyXpos, keyYpos;
-
-	while (_kbhit())
-	{
-		switch (_getch())
-		{
-		case 72: if (keyYpos > 0)      keyYpos -= 2; break; // Up
-		case 75: if (keyXpos < WIDTH)  keyXpos -= 2; break; // Left
-		case 77: if (keyXpos > 0)      keyYpos += 2; break; // Right
-		case 80: if (keyYpos < HEIGHT) keyYpos += 2; break; // Down
-		default: break;
-		}
-	}
-}
-
-void render()
-{
-
-}
+int keyXpos, keyYpos;
 
 void gotoxy(int x, int y)
 {
@@ -46,9 +12,60 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
+void init()
+{
+	keyXpos = keyYpos = 1;
+	
+	for (int i = 0; i < HEIGHT; ++i)
+	{
+		for (int j = 0; j < WIDTH; ++j)
+		{
+			blindMap[i][j] = '#';
+
+			if(i == 0 && j == 0) 
+				cout << "H ";
+			else 
+				cout << blindMap[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+
+void update()
+{
+	switch (_getch())
+	{
+	case 72: if (keyYpos > 1)              keyYpos -= 1; break; // Up
+	case 75: if (keyXpos > 1)              keyXpos -= 2; break; // Left
+	case 77: if (keyXpos < WIDTH * 2 - 2)  keyXpos += 2; break; // Right
+	case 80: if (keyYpos < HEIGHT)         keyYpos += 1; break; // Down
+	default: break;
+	}
+}
+
+void render()
+{
+	static int oldKeyXpos = 1, oldKeyYpos = 1;
+	
+	gotoxy(oldKeyXpos, oldKeyYpos);
+	cout << "#";
+
+	gotoxy(keyXpos, keyYpos);
+	cout << "H";
+
+	oldKeyXpos = keyXpos;
+	oldKeyYpos = keyYpos;
+}
+
 int main()
 {
 	init();
+
+	while (1)
+	{
+		update();
+		render();
+	}
 
 	return 0;
 }
