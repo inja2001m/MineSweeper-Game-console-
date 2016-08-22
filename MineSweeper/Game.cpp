@@ -26,10 +26,10 @@ void update()
 	{
 		switch (_getch())
 		{
-		case 72: if (keyYpos > 0)      keyYpos -= 2; break;
-		case 75: if (keyXpos < WIDTH)  keyXpos -= 2; break;
-		case 77: if (keyXpos > 0)      keyYpos += 2; break;
-		case 80: if (keyYpos < HEIGHT) keyYpos += 2; break;
+		case 72: if (keyYpos > 0)      keyYpos -= 2; break; // 위
+		case 75: if (keyXpos < WIDTH)  keyXpos -= 2; break; // 왼쪽
+		case 77: if (keyXpos > 0)      keyYpos += 2; break; // 오른쪽
+		case 80: if (keyYpos < HEIGHT) keyYpos += 2; break; // 아래
 		default: break;
 		}
 	}
