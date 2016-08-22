@@ -20,7 +20,19 @@ void init()
 
 void update()
 {
+	static int keyXpos, keyYpos;
 
+	while (_kbhit())
+	{
+		switch (_getch())
+		{
+		case 72: if (keyYpos > 0)      keyYpos -= 2; break;
+		case 75: if (keyXpos < WIDTH)  keyXpos -= 2; break;
+		case 77: if (keyXpos > 0)      keyYpos += 2; break;
+		case 80: if (keyYpos < HEIGHT) keyYpos += 2; break;
+		default: break;
+		}
+	}
 }
 
 void render()
