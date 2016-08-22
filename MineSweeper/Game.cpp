@@ -39,6 +39,8 @@ void update()
 	case 75: if (keyXpos > 1)              keyXpos -= 2; break; // Left
 	case 77: if (keyXpos < WIDTH * 2 - 2)  keyXpos += 2; break; // Right
 	case 80: if (keyYpos < HEIGHT)         keyYpos += 1; break; // Down
+	case 32:  break; // space(Select)
+	case 122: realMap.map[keyYpos - 1][keyXpos / 2].state = !realMap.map[keyYpos - 1][keyXpos / 2].state; break; // z(Check Mine)
 	default: break;
 	}
 }
@@ -48,10 +50,16 @@ void render()
 	static int oldKeyXpos = 1, oldKeyYpos = 1;
 	
 	gotoxy(oldKeyXpos, oldKeyYpos);
-	cout << "#";
+	if (realMap.map[oldKeyYpos - 1][oldKeyXpos / 2].state == true)
+		cout << "!";
+	else
+		cout << "#";
 
 	gotoxy(keyXpos, keyYpos);
-	cout << "H";
+	if (realMap.map[keyYpos - 1][keyXpos / 2].state == true)
+		cout << "!";
+	else
+		cout << "M";
 
 	oldKeyXpos = keyXpos;
 	oldKeyYpos = keyYpos;
@@ -66,6 +74,15 @@ int main()
 		update();
 		render();
 	}
+
+	//while (1)
+	//{
+	//	switch (_getch())
+	//	{
+	//	case 122:
+	//		cout << "asdasd" << endl; break;
+	//	}
+	//}
 
 	return 0;
 }
