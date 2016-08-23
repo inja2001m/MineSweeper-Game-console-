@@ -12,27 +12,8 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-// TODO. Function
 void find0Tile(int x, int y)
 {
-	//if (realMap.map[y - 1][x / 2].value != 0 ||
-	//	realMap.map[y - 1][x / 2].isVisible == true ||
-	//	( (1 < x && x < WIDTH * 2 - 2) || (1 < y && y < HEIGHT) )
-	//	)
-	//{
-	//	return 0;
-	//}
-	//
-	//gotoxy(x, y);
-	//cout << ". ";
-	//
-	//realMap.map[y - 1][x / 2].isVisible = true;
-	//
-	//return find0Tile(x, y - 1) * find0Tile(x - 2, y - 1) * find0Tile(x + 2, y - 1) *
-	//	find0Tile(x - 2, y) * find0Tile(x + 2, y) *
-	//	find0Tile(x - 2, y + 1) * find0Tile(x, y + 1) * find0Tile(x + 2, y + 1);
-	int oldX = x, oldY = y;
-
 	realMap.map[y - 1][x / 2].isVisible = true;
 
 	if (realMap.map[y - 1][x / 2].value != 0)
@@ -43,10 +24,10 @@ void find0Tile(int x, int y)
 		return;
 	}
 
-	if      (y - 1 > 1          && /*realMap.map[y - 1 - 1][x / 2].value == 0 &&*/ !realMap.map[y - 1 - 1][x / 2].isVisible) find0Tile(x, y - 1);  // Up 
-	else if (x / 2 > 1          && /*realMap.map[y - 1][x / 2 - 1].value == 0 &&*/ !realMap.map[y - 1][x / 2 - 1].isVisible) find0Tile(x - 2, y);  // Left
-	else if (x / 2 < WIDTH - 1  && /*realMap.map[y - 1][x / 2 + 1].value == 0 &&*/ !realMap.map[y - 1][x / 2 + 1].isVisible) find0Tile(x + 2, y);  // Right
-	else if (y - 1 < HEIGHT - 1 && /*realMap.map[y - 1 + 1][x / 2].value == 0 &&*/ !realMap.map[y - 1 + 1][x / 2].isVisible) find0Tile(x, y + 1);  // Down
+	if (y - 1 > 0          && !realMap.map[y - 1 - 1][x / 2].isVisible) find0Tile(x, y - 1);  // Up 
+	if (x / 2 > 0          && !realMap.map[y - 1][x / 2 - 1].isVisible) find0Tile(x - 2, y);  // Left
+	if (x / 2 < WIDTH - 1  && !realMap.map[y - 1][x / 2 + 1].isVisible) find0Tile(x + 2, y);  // Right
+	if (y - 1 < HEIGHT - 1 && !realMap.map[y - 1 + 1][x / 2].isVisible) find0Tile(x, y + 1);  // Down
 
 	gotoxy(x, y);
 	cout << ".";
@@ -78,7 +59,6 @@ bool update()
 	case 75: if (keyXpos > 1)              keyXpos -= 2; break; // Left
 	case 77: if (keyXpos < WIDTH * 2 - 2)  keyXpos += 2; break; // Right
 	case 80: if (keyYpos < HEIGHT)         keyYpos += 1; break; // Down
-	
 	case 32:  // space(Select)
 		if (!realMap.map[keyYpos - 1][keyXpos / 2].isVisible)
 		{
@@ -89,7 +69,6 @@ bool update()
 			}
 			else if (realMap.map[keyYpos - 1][keyXpos / 2].value == 0)
 			{
-				// TODO.
 				find0Tile(keyXpos, keyYpos);
 			}
 
