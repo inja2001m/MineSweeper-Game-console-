@@ -11,6 +11,5 @@
 'M' == Player cursor
 
 ##Aug 23th Example Ouput
-![default](https://cloud.githubusercontent.com/assets/13383741/17892162/da750f98-697a-11e6-8963-96135eedd4cf.JPG)	
-Space bar is select		
-Change the map size(5x5)
+![default](https://cloud.githubusercontent.com/assets/13383741/17892646/61c060ea-697d-11e6-9627-9c6b70b566ad.JPG)   
+Space bar is select
