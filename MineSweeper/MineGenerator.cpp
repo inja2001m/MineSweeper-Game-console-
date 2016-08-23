@@ -72,7 +72,7 @@ void MineMap::createCntMines()
 	}
 }
 
-inline void MineMap::drawMap()
+void MineMap::drawMap()
 {
 	int cntMine = 0;
 
