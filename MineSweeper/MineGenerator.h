@@ -5,9 +5,9 @@
 
 using namespace std;
 
-#define WIDTH 5
-#define HEIGHT 5
-#define MINECNT 1 // Total Mine
+#define WIDTH 15
+#define HEIGHT 10
+#define MINECNT 20 // Total Mine
 
 enum Tile
 {
