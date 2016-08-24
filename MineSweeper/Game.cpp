@@ -121,7 +121,8 @@ int update()
 		}
 		break; 
 	case 122: // z(Check Mine)
-		if (realMap.map[keyYpos - 1][keyXpos / 2].isVisible == false && totalMineCnt > 0)
+		if (realMap.map[keyYpos - 1][keyXpos / 2].isVisible == false && totalMineCnt > 0 || 
+			(totalMineCnt == 0 && realMap.map[keyYpos - 1][keyXpos / 2].isState == true))
 		{
 			realMap.map[keyYpos - 1][keyXpos / 2].isState = !realMap.map[keyYpos - 1][keyXpos / 2].isState;
 
