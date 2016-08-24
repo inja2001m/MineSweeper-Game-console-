@@ -201,7 +201,7 @@ void inGame()
 				if (realMap.map[i][k].isState == true || realMap.map[i][k].isVisible == false)
 				{
 					gotoxy(j + 1, i + 1);
-					if(realMap.map[i][k-1].value != 0) cout << realMap.map[i][k-1].value;
+					if(realMap.map[i][k].value != 0) cout << realMap.map[i][k].value;
 					else cout << ".";
 				}
 			}
@@ -219,8 +219,9 @@ int main()
 		cout << "RESTART = ANY KEY";
 		gotoxy(25, HEIGHT + 12);
 		cout << "ESC     = EXIT";
-		
+
 		if (_getch() == 27) return 0;
+
 	}
 	return 0;
 }
