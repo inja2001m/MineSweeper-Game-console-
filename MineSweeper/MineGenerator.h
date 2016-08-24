@@ -7,7 +7,7 @@ using namespace std;
 
 #define WIDTH 15
 #define HEIGHT 10
-#define MINECNT 20 // Total Mine
+#define MINECNT 15 // Total Mine
 
 enum Tile
 {
@@ -26,10 +26,12 @@ class MineMap
 private:
 	inline void zeroSetMap() { for (int i = 0; i < HEIGHT; ++i) for (int j = 0; j < WIDTH; ++j) map[i][j].value = NULL; }
 	//inline void drawMap();
-	void createMap(), createMines(), createCntMines();
+	void createMines(), createCntMines();
 
 public:
 	MineMap();
+
+	void createMap();
 	void drawMap();
 	
 	Mine map[HEIGHT][WIDTH];
