@@ -3,8 +3,16 @@
 #include <Windows.h>
 
 MineMap realMap;
-char blindMap[HEIGHT][WIDTH];
 int keyXpos, keyYpos;
+int oldKeyXpos, oldKeyYpos;
+int totalTileCnt, totalMineCnt;
+
+enum PlayState
+{
+	GAMEOVER = 0,
+	GAMECLEAR = 1,
+	GAMING = 2
+};
 
 void gotoxy(int x, int y)
 {
@@ -15,7 +23,13 @@ void gotoxy(int x, int y)
 void find0Tile(int x, int y)
 {
 	realMap.map[y - 1][x / 2].isVisible = true;
+	--totalTileCnt;
 
+	if (realMap.map[y - 1][x / 2].isState == true)
+	{
+		realMap.map[y - 1][x / 2].isState = false;
+		++totalMineCnt;
+	}
 	if (realMap.map[y - 1][x / 2].value != 0)
 	{
 		gotoxy(x, y);
@@ -35,24 +49,48 @@ void find0Tile(int x, int y)
 
 void init()
 {
-	keyXpos = keyYpos = 1;
+	system("cls");
+
+	keyXpos = keyYpos = oldKeyXpos = oldKeyYpos = 1;
 	
+	gotoxy(WIDTH * 2 + 10, 2);
+	cout << " ┌─────────┐";
+	gotoxy(WIDTH*2 + 10, 3);
+	cout << " H┣Move: Arrow      │T";
+	gotoxy(WIDTH*2 + 10, 4);
+	cout << " O┣Select: Space bar│";
+	gotoxy(WIDTH*2 + 10, 5);
+	cout << " W┣Check the mine: Z│O";
+	gotoxy(WIDTH * 2 + 10, 6);
+	cout << " └─────────┘";
+
 	for (int i = 0; i < HEIGHT; ++i)
 	{
-		for (int j = 0; j < WIDTH; ++j)
+		for (int j = 0; j < WIDTH * 2; j += 2)
 		{
-			blindMap[i][j] = '#';
-
-			if(i == 0 && j == 0) 
-				cout << "M ";
-			else 
-				cout << blindMap[i][j] << " ";
+			gotoxy(j + 1, i + 1);
+			if (i == 0 && j == 0) cout << 'M';
+			else cout << '#';
 		}
-		cout << endl;
 	}
+
+	totalTileCnt = WIDTH * HEIGHT;
+	totalMineCnt = MINECNT;
+
+	realMap.createMap();
+
+	gotoxy(1, HEIGHT + 2);
+	cout << "The number of mines: " << totalMineCnt << " ";
 }
-bool update()
+int update()
 {
+	// Game clear code
+	if (totalTileCnt == MINECNT)
+	{
+		return PlayState::GAMECLEAR;
+	}
+	
+	// Input the key code
 	switch (_getch())
 	{
 	case 72: if (keyYpos > 1)              keyYpos -= 1; break; // Up
@@ -60,34 +98,52 @@ bool update()
 	case 77: if (keyXpos < WIDTH * 2 - 2)  keyXpos += 2; break; // Right
 	case 80: if (keyYpos < HEIGHT)         keyYpos += 1; break; // Down
 	case 32:  // space(Select)
-		if (!realMap.map[keyYpos - 1][keyXpos / 2].isVisible)
+		if (realMap.map[keyYpos - 1][keyXpos / 2].isState == false)
 		{
-			if (realMap.map[keyYpos - 1][keyXpos / 2].value == Tile::MINE)
+			if (realMap.map[keyYpos - 1][keyXpos / 2].isVisible == false)
 			{
-				realMap.map[keyYpos - 1][keyXpos / 2].isVisible = true;
-				return true;
+				if (realMap.map[keyYpos - 1][keyXpos / 2].value == Tile::MINE)
+				{
+					realMap.map[keyYpos - 1][keyXpos / 2].isVisible = true;
+					--totalTileCnt;
+					return PlayState::GAMEOVER;
+				}
+				else if (realMap.map[keyYpos - 1][keyXpos / 2].value == 0)
+				{
+					find0Tile(keyXpos, keyYpos);
+				}
+				else
+				{
+					realMap.map[keyYpos - 1][keyXpos / 2].isVisible = true;
+					--totalTileCnt;
+				}
 			}
-			else if (realMap.map[keyYpos - 1][keyXpos / 2].value == 0)
-			{
-				find0Tile(keyXpos, keyYpos);
-			}
-
-			realMap.map[keyYpos - 1][keyXpos / 2].isVisible = true;
 		}
 		break; 
 	case 122: // z(Check Mine)
-		if (realMap.map[keyYpos - 1][keyXpos / 2].isVisible == false)
-			realMap.map[keyYpos - 1][keyXpos / 2].isState = !realMap.map[keyYpos - 1][keyXpos / 2].isState; 
+		if (realMap.map[keyYpos - 1][keyXpos / 2].isVisible == false && totalMineCnt > 0)
+		{
+			realMap.map[keyYpos - 1][keyXpos / 2].isState = !realMap.map[keyYpos - 1][keyXpos / 2].isState;
+
+			if (realMap.map[keyYpos - 1][keyXpos / 2].isState == true)
+				--totalMineCnt;
+			else
+				++totalMineCnt;
+		}
 		break; 
 	default: break;
 	}
 
-	return false;
+	return PlayState::GAMING;
 }
 void render()
 {
-	static int oldKeyXpos = 1, oldKeyYpos = 1;
-	
+	if (totalMineCnt >= 0)
+	{
+		gotoxy(1, HEIGHT + 2);
+		cout << "The number of mines: " << totalMineCnt << " ";
+	}
+
 	gotoxy(oldKeyXpos, oldKeyYpos);
 	if (realMap.map[oldKeyYpos - 1][oldKeyXpos / 2].isState == true)
 		cout << "!";
@@ -115,25 +171,40 @@ void render()
 
 void inGame()
 {
-	bool isdead = false;
+	int isState;
 
 	init();
 	do
 	{
-		isdead = update();
+		isState = update();
 		render();
-	} while (isdead == false);
+	} while (isState == PlayState::GAMING);
+
+	if (isState == PlayState::GAMECLEAR)
+	{
+		gotoxy(25, HEIGHT + 9);
+		cout << "★GAME CLEAR★";
+	}
+	else if (isState == PlayState::GAMEOVER)
+	{
+		gotoxy(25, HEIGHT + 9);
+		cout << "GAME OVER";
+	}
 }
 
 int main()
 {
-	inGame();
+	while (1)
+	{
+		inGame();
 
-	gotoxy(1, 20);
-	cout << "게임오버!";
-	_getch();
-
-//	realMap.drawMap();
-
+		gotoxy(25, HEIGHT + 11);
+		cout << "RESTART = ANY KEY";
+		gotoxy(25, HEIGHT + 12);
+		cout << "ESC     = EXIT";
+		
+		if (_getch() == 27) return 0;
+	}
+	
 	return 0;
 }
