@@ -188,6 +188,8 @@ void inGame()
 	}
 	else if (isState == PlayState::GAMEOVER)
 	{
+		printf("\a");
+
 		gotoxy(27, HEIGHT + 6);
 		cout << "9 = Mine";
 
