@@ -187,8 +187,24 @@ void inGame()
 	}
 	else if (isState == PlayState::GAMEOVER)
 	{
-		gotoxy(25, HEIGHT + 9);
+		gotoxy(27, HEIGHT + 6);
+		cout << "9 = Mine";
+
+		gotoxy(27, HEIGHT + 9);
 		cout << "GAME OVER";
+
+		for (int i = 0; i < HEIGHT; ++i)
+		{
+			for (int j = 0, k = 0; j < WIDTH * 2 - 1; j += 2, ++k)
+			{
+				if (realMap.map[i][k].isState == true || realMap.map[i][k].isVisible == false)
+				{
+					gotoxy(j + 1, i + 1);
+					if(realMap.map[i][k-1].value != 0) cout << realMap.map[i][k-1].value;
+					else cout << ".";
+				}
+			}
+		}
 	}
 }
 
@@ -205,6 +221,5 @@ int main()
 		
 		if (_getch() == 27) return 0;
 	}
-	
 	return 0;
 }
