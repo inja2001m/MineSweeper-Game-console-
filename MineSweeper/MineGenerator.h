@@ -25,7 +25,6 @@ class MineMap
 {
 private:
 	inline void zeroSetMap() { for (int i = 0; i < HEIGHT; ++i) for (int j = 0; j < WIDTH; ++j) map[i][j].value = NULL; }
-	//inline void drawMap();
 	void createMines(), createCntMines();
 
 public:
